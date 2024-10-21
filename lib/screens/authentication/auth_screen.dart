@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:car_workshop_app/const/color.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
-class AuthScreen extends StatefulWidget {
+import '../../controllers/auth_controller.dart';
+import '../home_screen.dart';
+
+class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
-  String _email = '';
-  String _password = '';
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   bool _isLogin = true;
   String? _role;
 
@@ -44,6 +49,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: Column(
                   children: [
                     TextFormField(
+                      controller: emailController,
                       decoration: const InputDecoration(labelText: 'Email'),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
@@ -54,10 +60,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         }
                         return null;
                       },
-                      onSaved: (value) => _email = value!,
                     ),
                     SizedBox(height: screenHeight * 0.020),
                     TextFormField(
+                      controller: passwordController,
                       decoration: const InputDecoration(labelText: 'Password'),
                       obscureText: true,
                       validator: (value) {
@@ -68,7 +74,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         }
                         return null;
                       },
-                      onSaved: (value) => _password = value!,
                     ),
                     if (!_isLogin) ...[
                       SizedBox(height: screenHeight * 0.025),
@@ -109,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           },
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: _isLogin ? _logInUser : _signUpUser,
                       child: Text(
                         _isLogin ? 'Login' : 'Register',
                         style: const TextStyle(color: Colors.white),
@@ -141,5 +146,54 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _signUpUser() async {
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
+
+      try {
+        await ref.read(authControllerProvider.notifier).signUp(
+              emailController.text,
+              passwordController.text,
+              _role!,
+            );
+
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Sign up failed: $e')),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _logInUser() async {
+    if (_formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
+
+      try {
+        final user = await ref
+            .read(authControllerProvider.notifier)
+            .logIn(emailController.text, passwordController.text);
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Log In failed: $e')),
+          );
+        }
+      }
+    }
   }
 }

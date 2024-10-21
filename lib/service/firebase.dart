@@ -20,6 +20,7 @@ class FirebaseService {
       );
 
       await _firestore.collection('users').doc(user.uid).set(user.toMap());
+      print('Created the user');
       return user;
     } catch (e) {
       print('Sign up error: $e');
@@ -35,7 +36,9 @@ class FirebaseService {
       );
 
       DocumentSnapshot userDoc = await _firestore.collection('users').doc(userCredential.user!.uid).get();
+      print('logged in ');
       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+
     } catch (e) {
       print('Log in error: $e');
       return null;
