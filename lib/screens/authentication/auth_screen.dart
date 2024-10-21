@@ -1,10 +1,9 @@
+import 'package:car_workshop_app/screens/admin/admin.dart';
+import 'package:car_workshop_app/screens/mechanic/mechanic.dart';
 import 'package:flutter/material.dart';
 import 'package:car_workshop_app/const/color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
-
 import '../../controllers/auth_controller.dart';
-import '../home_screen.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -158,17 +157,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               passwordController.text,
               _role!,
             );
-
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        }
+        _navigateBasedOnRole();
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Sign up failed: $e')),
-          );
+         _showSnackBar('Sign up failed: $e');
         }
       }
     }
@@ -179,21 +171,45 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       FocusScope.of(context).unfocus();
 
       try {
-        final user = await ref
+        await ref
             .read(authControllerProvider.notifier)
             .logIn(emailController.text, passwordController.text);
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        }
+
+        _navigateBasedOnRole();
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Log In failed: $e')),
-          );
+          _showSnackBar('Log In failed: $e');
         }
       }
     }
   }
-}
+
+  void _navigateBasedOnRole() {
+    final user = ref.read(authControllerProvider);
+    if (mounted && user != null) {
+      Widget targetScreen;
+
+      switch (user.role) {
+        case 'admin':
+          targetScreen = const AdminScreen();
+          break;
+        case 'mechanic':
+          targetScreen = const MechanicScreen();
+          break;
+        default:
+          targetScreen = const AuthScreen(); // Default case for users
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => targetScreen),
+      );
+    }
+  }
+
+  void _showSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
+  }}
