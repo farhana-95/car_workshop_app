@@ -1,4 +1,4 @@
-import 'package:car_workshop_app/screens/admin/admin.dart';
+import 'package:car_workshop_app/screens/admin/admin_screen.dart';
 import 'package:car_workshop_app/screens/authentication/auth_screen.dart';
 import 'package:car_workshop_app/screens/mechanic/mechanic.dart';
 import 'package:firebase_core/firebase_core.dart';

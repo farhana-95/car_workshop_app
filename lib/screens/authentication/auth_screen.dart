@@ -1,4 +1,4 @@
-import 'package:car_workshop_app/screens/admin/admin.dart';
+import 'package:car_workshop_app/screens/admin/admin_screen.dart';
 import 'package:car_workshop_app/screens/mechanic/mechanic.dart';
 import 'package:flutter/material.dart';
 import 'package:car_workshop_app/const/color.dart';

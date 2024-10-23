@@ -10,11 +10,19 @@ class AdminScreen extends StatefulWidget {
 class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           children: [
-            Text('Admin Screen')
+            GestureDetector(
+              onTap: (){},
+              child: const Text('Create new booking'),
+            ),
+            const SizedBox(height: 20,),
+            GestureDetector(
+              onTap: (){},
+              child: const Text('View bookings'),
+            ),
           ],
         ),
       ),
