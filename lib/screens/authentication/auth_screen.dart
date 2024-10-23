@@ -157,7 +157,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               passwordController.text,
               _role!,
             );
-        _navigateBasedOnRole();
       } catch (e) {
         if (mounted) {
          _showSnackBar('Sign up failed: $e');
@@ -174,8 +173,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         await ref
             .read(authControllerProvider.notifier)
             .logIn(emailController.text, passwordController.text);
-
-        _navigateBasedOnRole();
       } catch (e) {
         if (mounted) {
           _showSnackBar('Log In failed: $e');
@@ -184,27 +181,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
-  void _navigateBasedOnRole() {
-    final user = ref.read(authControllerProvider);
-    if (mounted && user != null) {
-      Widget targetScreen;
-
-      switch (user.role) {
-        case 'admin':
-          targetScreen = const AdminScreen();
-          break;
-        case 'mechanic':
-          targetScreen = const MechanicScreen();
-          break;
-        default:
-          targetScreen = const AuthScreen(); // Default case for users
-      }
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => targetScreen),
-      );
-    }
-  }
 
   void _showSnackBar(String message) {
     if (mounted) {
