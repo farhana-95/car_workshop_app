@@ -25,64 +25,78 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
 
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            const Center(
-              child: Text(
-                'Enter Car Information',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.black,
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const Center(
+                  child: Text(
+                    'Enter Car Information',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: carMakeController,
+                  label: 'Make',
+                ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: carModelController,
+                  label: 'Model',
+                ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: carYearController,
+                  label: 'Year',
+                ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: registrationPlateController,
+                  label: 'Registration Plate',
+                ),
+                const SizedBox(height: 35),
+                Center(
+                  child: CommonButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        final currentState = ref.read(carInfoStateProvider.notifier).state;
+
+                        final carInfo = ref
+                            .read(carInfoStateProvider.notifier)
+                            .update((state) => BookingModel(
+                                carMake: carMakeController.text,
+                                carModel: carModelController.text,
+                                carYear: carYearController.text,
+                                registrationPlate:
+                                    registrationPlateController.text,
+                                customerEmail: currentState.customerEmail,
+                                customerName: currentState.customerName,
+                                customerPhone: currentState.customerPhone,
+                                bookingTitle: currentState.bookingTitle,
+                                startDateTime: currentState.startDateTime,
+                                endDateTime: currentState.endDateTime));
+                        print(
+                            'CarInfo ${carInfo.carMake} ${carInfo.carModel} ${carInfo.carYear}');
+                        widget.tabController.animateTo(1);
+                      }
+                    },
+                    title: 'Next',
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: carMakeController,
-              label: 'Make',
-            ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: carModelController,
-              label: 'Model',
-            ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: carYearController,
-              label: 'Year',
-            ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: registrationPlateController,
-              label: 'Registration Plate',
-            ),
-            const SizedBox(height: 35),
-            Center(
-              child: CommonButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final carInfo = ref
-                        .watch(carInfoStateProvider.notifier)
-                        .update((state) => BookingModel(
-                              carMake: carMakeController.text,
-                              carModel: carModelController.text,
-                              carYear: registrationPlateController.text,
-                            ));
-                    print('CarInfo $carInfo');
-                    // widget.tabController.animateTo(1);
-                  }
-                },
-                title: 'Next',
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

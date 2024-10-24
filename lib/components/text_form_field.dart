@@ -5,7 +5,8 @@ class CustomTextFormField extends StatelessWidget {
   final String label;
   final String? hintText;
   final TextInputType keyboardType;
-  final Function()? onTap;
+  final GestureTapCallback? onTap;
+  final bool isDateTimePicker;
 
   const CustomTextFormField({
     super.key,
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
     this.hintText,
     this.keyboardType = TextInputType.text,
     this.onTap,
+    this.isDateTimePicker = false
   });
 
   @override
@@ -21,7 +23,8 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
-      readOnly: onTap != null,
+      onTap: isDateTimePicker ? onTap : null,
+      readOnly: isDateTimePicker,
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,

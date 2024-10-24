@@ -21,6 +21,7 @@ class BookingController extends StateNotifier<List<BookingModel>> {
     try {
       final bookingsData = await _firebaseService.fetchBookings();
       state = bookingsData.map((map) => BookingModel.fromMap(map)).toList();
+
     } catch (e) {
       print('Error fetching bookings: $e');
     }

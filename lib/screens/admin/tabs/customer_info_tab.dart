@@ -33,59 +33,74 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            const Center(
-              child: Text(
-                'Customer Information',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                  color: Colors.black,
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const Center(
+                  child: Text(
+                    'Customer Information',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: customerNameController,
+                  label: 'Name',
+                ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: customerPhoneController,
+                  label: 'Phone Number',
+                ),
+                const SizedBox(height: 18),
+                CustomTextFormField(
+                  controller: customerEmailController,
+                  label: 'Email',
+                ),
+                const SizedBox(height: 35),
+                Center(
+                  child: CommonButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        final currentState = ref.read(carInfoStateProvider.notifier).state;
+
+                        final customer = ref
+                            .read(carInfoStateProvider.notifier)
+                            .update((state) =>
+                            BookingModel(
+                                carMake: currentState.carMake,
+                                carModel: currentState.carModel,
+                                carYear: currentState.carYear,
+                                registrationPlate: currentState.registrationPlate,
+                                customerName: customerNameController.text,
+                                customerEmail: customerEmailController.text,
+                                customerPhone: customerPhoneController.text,
+                                bookingTitle: currentState.bookingTitle,
+                                startDateTime: currentState.startDateTime,
+                                endDateTime: currentState.endDateTime
+                            ));
+                        print('CustomerInfo ${customer.customerName}  ${customer
+                            .customerEmail}  ${customer.customerPhone}');
+                        widget.tabController.animateTo(2);
+                      }
+                    },
+                    title: 'Next',
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: customerNameController,
-              label: 'Name',
-            ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: customerPhoneController,
-              label: 'Phone Number',
-            ),
-            const SizedBox(height: 18),
-            CustomTextFormField(
-              controller: customerEmailController,
-              label: 'Email',
-            ),
-            const SizedBox(height: 35),
-            Center(
-              child: CommonButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    final customer = ref
-                        .watch(carInfoStateProvider.notifier)
-                        .update((state) => BookingModel(
-                      customerName: customerNameController.text,
-                      customerEmail: customerEmailController.text,
-                      customerPhone: customerPhoneController.text,
-                    ));
-                    print('CustomerInfo $customer');
-                    widget.tabController.animateTo(2);
-                  }
-                },
-                title:'Next',
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
