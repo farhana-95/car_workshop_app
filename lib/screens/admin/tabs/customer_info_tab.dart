@@ -1,44 +1,92 @@
+import 'package:car_workshop_app/components/elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:car_workshop_app/components/text_form_field.dart';
 
-class CustomerInfoTab extends ConsumerWidget {
+import '../../../controllers/booking_form_controller.dart';
+import '../../../models/booking_model.dart';
+
+class CustomerInfoTab extends ConsumerStatefulWidget {
   final TabController tabController;
 
   const CustomerInfoTab({super.key, required this.tabController});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final customerNameController = TextEditingController();
-    final customerPhoneController = TextEditingController();
-    final customerEmailController = TextEditingController();
+  ConsumerState<CustomerInfoTab> createState() => _CustomerInfoTabState();
+}
 
+class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
+  final customerNameController = TextEditingController();
+  final customerPhoneController = TextEditingController();
+  final customerEmailController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+
+  @override
+  void dispose() {
+    customerNameController.dispose();
+    customerPhoneController.dispose();
+    customerEmailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Customer Information',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          TextFormField(
-            controller: customerNameController,
-            decoration: const InputDecoration(labelText: 'Name'),
-          ),
-          TextFormField(
-            controller: customerPhoneController,
-            decoration: const InputDecoration(labelText: 'Phone Number'),
-          ),
-          TextFormField(
-            controller: customerEmailController,
-            decoration: const InputDecoration(labelText: 'Email'),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () {
-              tabController.animateTo(2); // Move to the next tab
-            },
-            child: const Text('Next'),
-          ),
-        ],
+      padding: const EdgeInsets.all(18.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            const Center(
+              child: Text(
+                'Customer Information',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            CustomTextFormField(
+              controller: customerNameController,
+              label: 'Name',
+            ),
+            const SizedBox(height: 18),
+            CustomTextFormField(
+              controller: customerPhoneController,
+              label: 'Phone Number',
+            ),
+            const SizedBox(height: 18),
+            CustomTextFormField(
+              controller: customerEmailController,
+              label: 'Email',
+            ),
+            const SizedBox(height: 35),
+            Center(
+              child: CommonButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    final customer = ref
+                        .watch(carInfoStateProvider.notifier)
+                        .update((state) => BookingModel(
+                      customerName: customerNameController.text,
+                      customerEmail: customerEmailController.text,
+                      customerPhone: customerPhoneController.text,
+                    ));
+                    print('CustomerInfo $customer');
+                    widget.tabController.animateTo(2);
+                  }
+                },
+                title:'Next',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

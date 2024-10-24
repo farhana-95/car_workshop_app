@@ -25,6 +25,10 @@ class AuthController extends StateNotifier<UserModel?> {
     state = user;
   }
 
+  Future<List<UserModel>> fetchMechanics() async {
+    return await _firebaseService.fetchMechanics();
+  }
+
   Future<void> signOut() async {
     await _firebaseService.signOut();
     state = null;

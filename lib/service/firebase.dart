@@ -48,4 +48,29 @@ class FirebaseService {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  Future<List<Map<String, dynamic>>> fetchBookings() async {
+    final querySnapshot = await _firestore.collection('bookings').get();
+    return querySnapshot.docs.map((doc) => doc.data()).toList();
+  }
+
+  Future<void> addBooking(Map<String, dynamic> bookingData) async {
+    await _firestore.collection('bookings').add(bookingData);
+  }
+
+  Future<List<UserModel>> fetchMechanics() async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('role', isEqualTo: 'mechanic') // Assuming 'role' is the field for user roles
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => UserModel.fromMap(doc.data()))
+          .toList();
+    } catch (e) {
+      print('Error fetching mechanics: $e');
+      return [];
+    }
+  }
 }
