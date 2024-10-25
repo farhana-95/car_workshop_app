@@ -4,8 +4,7 @@ import 'package:car_workshop_app/controllers/booking_form_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../components/error_dialog.dart';
-import '../../../models/booking_model.dart';
+import 'package:car_workshop_app/components/error_dialog.dart';
 
 class CarInfoTab extends ConsumerStatefulWidget {
   final TabController tabController;
@@ -17,15 +16,30 @@ class CarInfoTab extends ConsumerStatefulWidget {
 }
 
 class _CarInfoTabState extends ConsumerState<CarInfoTab> {
+  final carMakeController = TextEditingController();
+  final carModelController = TextEditingController();
+  final carYearController = TextEditingController();
+  final registrationPlateController = TextEditingController();
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    carMakeController.dispose();
+    carModelController.dispose();
+    carYearController.dispose();
+    registrationPlateController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final carMakeController = TextEditingController();
-    final carModelController = TextEditingController();
-    final carYearController = TextEditingController();
-    final registrationPlateController = TextEditingController();
 
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    final bookingModel = ref.watch(carInfoStateProvider);
+    ref.watch(carInfoStateProvider);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -72,7 +86,7 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         try {
-                          final carInfo = ref
+                          ref
                               .read(carInfoStateProvider.notifier)
                               .update((state) => state.copyWith(
                                     carMake: carMakeController.text,

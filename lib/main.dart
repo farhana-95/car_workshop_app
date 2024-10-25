@@ -3,7 +3,6 @@ import 'package:car_workshop_app/screens/authentication/auth_screen.dart';
 import 'package:car_workshop_app/screens/mechanic/mechanic.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'controllers/auth_controller.dart';

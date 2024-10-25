@@ -1,6 +1,7 @@
 import 'package:car_workshop_app/screens/admin/car_booking_form.dart';
+import 'package:car_workshop_app/screens/admin/view_bookings.dart';
 import 'package:flutter/material.dart';
-import '../../const/color.dart';
+import 'package:car_workshop_app/const/color.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -20,7 +21,6 @@ class _AdminScreenState extends State<AdminScreen> {
         ),
         centerTitle: true,
         elevation: 2,
-        // backgroundColor: ColorList.lightBlue,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
@@ -28,9 +28,10 @@ class _AdminScreenState extends State<AdminScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const CarBookingForm()),
+                  MaterialPageRoute(
+                      builder: (context) => const CarBookingForm()),
                 );
               },
               child: _buildDashboardCard(
@@ -40,7 +41,11 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 20),
             GestureDetector(
-              onTap: (){},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const ViewBookings()),
+                );
+              },
               child: _buildDashboardCard(
                 title: 'View Bookings',
                 icon: Icons.event_note_outlined,

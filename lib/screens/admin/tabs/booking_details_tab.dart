@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:car_workshop_app/components/text_form_field.dart';
 import 'package:intl/intl.dart';
-
-import '../../../components/error_dialog.dart';
-import '../../../controllers/booking_form_controller.dart';
-import '../../../models/booking_model.dart';
+import 'package:car_workshop_app/components/error_dialog.dart';
+import 'package:car_workshop_app/controllers/booking_form_controller.dart';
 
 class BookingDetailsTab extends ConsumerStatefulWidget {
   final TabController tabController;
@@ -31,7 +29,7 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
   @override
   void initState() {
     super.initState();
-    _fetchMechanics(); // Fetch mechanics on widget initialization
+    _fetchMechanics();
   }
 
   @override
@@ -42,48 +40,9 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
     super.dispose();
   }
 
-  Future<void> _fetchMechanics() async {
-    final mechanics =
-        await ref.read(authControllerProvider.notifier).fetchMechanics();
-    print('MEchanics $_mechanics');
-    setState(() {
-      _mechanics = mechanics;
-    });
-  }
-
-  Future<void> _selectDateTime(TextEditingController controller) async {
-    DateTime? pickedDateTime = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (pickedDateTime != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-
-      if (pickedTime != null) {
-        DateTime combinedDateTime = DateTime(
-          pickedDateTime.year,
-          pickedDateTime.month,
-          pickedDateTime.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
-        String formattedDateTime =
-            DateFormat('dd/MM/yyyy HH:mm').format(combinedDateTime);
-
-        controller.text = formattedDateTime;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final currentState = ref.watch(carInfoStateProvider);
+    ref.watch(carInfoStateProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -179,9 +138,8 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                           DateTime endDateTime = DateFormat('dd/MM/yyyy HH:mm')
                               .parse(endDateTimeController.text);
 
-                          final details = ref
-                              .read(carInfoStateProvider.notifier)
-                              .update((state) => state.copyWith(
+                          ref.read(carInfoStateProvider.notifier).update(
+                              (state) => state.copyWith(
                                   bookingTitle: bookingTitleController.text,
                                   startDateTime: startDateTime,
                                   endDateTime: endDateTime,
@@ -212,5 +170,43 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
         ),
       ),
     );
+  }
+
+  Future<void> _fetchMechanics() async {
+    final mechanics =
+        await ref.read(authControllerProvider.notifier).fetchMechanics();
+    setState(() {
+      _mechanics = mechanics;
+    });
+  }
+
+  Future<void> _selectDateTime(TextEditingController controller) async {
+    DateTime? pickedDateTime = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDateTime != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        DateTime combinedDateTime = DateTime(
+          pickedDateTime.year,
+          pickedDateTime.month,
+          pickedDateTime.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+        String formattedDateTime =
+            DateFormat('dd/MM/yyyy HH:mm').format(combinedDateTime);
+
+        controller.text = formattedDateTime;
+      }
+    }
   }
 }

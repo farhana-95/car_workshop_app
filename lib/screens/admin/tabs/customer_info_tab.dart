@@ -2,10 +2,8 @@ import 'package:car_workshop_app/components/elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:car_workshop_app/components/text_form_field.dart';
-
-import '../../../components/error_dialog.dart';
-import '../../../controllers/booking_form_controller.dart';
-import '../../../models/booking_model.dart';
+import 'package:car_workshop_app/components/error_dialog.dart';
+import 'package:car_workshop_app/controllers/booking_form_controller.dart';
 
 class CustomerInfoTab extends ConsumerStatefulWidget {
   final TabController tabController;
@@ -23,6 +21,10 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState(){
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -34,7 +36,7 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
 
   @override
   Widget build(BuildContext context) {
-    final currentState = ref.watch(carInfoStateProvider);
+    ref.watch(carInfoStateProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -77,7 +79,7 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         try{
-                          final customer = ref
+                          ref
                               .read(carInfoStateProvider.notifier)
                               .update((state) => state.copyWith(
                                     customerName: customerNameController.text,
