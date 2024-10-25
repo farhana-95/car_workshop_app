@@ -2,15 +2,22 @@ import 'package:car_workshop_app/screens/admin/car_booking_form.dart';
 import 'package:car_workshop_app/screens/admin/view_bookings.dart';
 import 'package:flutter/material.dart';
 import 'package:car_workshop_app/const/color.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:car_workshop_app/controllers/auth_controller.dart';
 
-class AdminScreen extends StatefulWidget {
+class AdminScreen extends ConsumerStatefulWidget {
   const AdminScreen({super.key});
 
   @override
-  State<AdminScreen> createState() => _AdminScreenState();
+  ConsumerState<AdminScreen> createState() => _AdminScreenState();
 }
 
-class _AdminScreenState extends State<AdminScreen> {
+class _AdminScreenState extends ConsumerState<AdminScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,6 +28,13 @@ class _AdminScreenState extends State<AdminScreen> {
         ),
         centerTitle: true,
         elevation: 2,
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await ref.read(authControllerProvider.notifier).signOut();
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),

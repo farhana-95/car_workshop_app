@@ -42,7 +42,6 @@ class FirebaseService {
           .collection('users')
           .doc(userCredential.user!.uid)
           .get();
-      print('logged in ');
       return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
     } catch (e) {
       print('Log in error: $e');
@@ -60,9 +59,25 @@ class FirebaseService {
       final data = querySnapshot.docs
           .map((doc) => BookingModel.fromMap(doc.data()))
           .toList();
-      print('BOOK DATA $data');
       return data;
     } catch (e) {
+      
+      return [];
+    }
+  }
+
+  Future<List<BookingModel>> fetchBookingsByMechanic(String assignedMechanic) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('bookings')
+          .where('assignedMechanic', isEqualTo: assignedMechanic)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => BookingModel.fromMap(doc.data()))
+          .toList();
+    } catch (e) {
+      print('Error fetching bookings: $e');
       return [];
     }
   }

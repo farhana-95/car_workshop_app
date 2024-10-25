@@ -10,6 +10,7 @@ class BookingModel {
   final DateTime? startDateTime;
   final DateTime? endDateTime;
   final String? assignedMechanic;
+  final String? mechanicId;
 
   BookingModel({
     this.carMake,
@@ -23,6 +24,7 @@ class BookingModel {
     this.startDateTime,
     this.endDateTime,
     this.assignedMechanic,
+    this.mechanicId
   });
 
   BookingModel copyWith({
@@ -37,6 +39,7 @@ class BookingModel {
     DateTime? startDateTime,
     DateTime? endDateTime,
     String? assignedMechanic,
+    String? mechanicId,
   }) {
     return BookingModel(
       carMake: carMake ?? this.carMake,
@@ -50,6 +53,7 @@ class BookingModel {
       startDateTime: startDateTime ?? this.startDateTime,
       endDateTime: endDateTime ?? this.endDateTime,
       assignedMechanic: assignedMechanic ?? this.assignedMechanic,
+      mechanicId: mechanicId ?? this.mechanicId
     );
   }
 
@@ -66,6 +70,7 @@ class BookingModel {
       'startDateTime': startDateTime?.toIso8601String(),
       'endDateTime': endDateTime?.toIso8601String(),
       'assignedMechanic': assignedMechanic,
+      'mechanicId': mechanicId,
     };
   }
 
@@ -82,6 +87,7 @@ class BookingModel {
       startDateTime: DateTime.parse(map['startDateTime']),
       endDateTime: DateTime.parse(map['endDateTime']),
       assignedMechanic: map['assignedMechanic'] ?? '',
+        mechanicId: map['mechanicId'] ?? '',
     );
   }
 }

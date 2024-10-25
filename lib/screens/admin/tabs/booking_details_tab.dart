@@ -23,6 +23,7 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
   final startDateTimeController = TextEditingController();
   final endDateTimeController = TextEditingController();
   String? selectedMechanic;
+  String? selectedMechanicId;
   late List<UserModel> _mechanics = [];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -97,15 +98,18 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                   value: selectedMechanic,
                   hint: const Text('Assign Mechanic'),
                   onChanged: (newValue) {
+                    final selectedMechanicModel = _mechanics
+                        .firstWhere((mechanic) => mechanic.uid == newValue);
                     setState(() {
-                      selectedMechanic = newValue;
+                      selectedMechanicId = newValue;
+                      selectedMechanic = selectedMechanicModel.name;
                     });
                   },
                   items: _mechanics.map((UserModel mechanic) {
                     return DropdownMenuItem<String>(
                       value: mechanic.uid,
                       child: Text(
-                        mechanic.email!,
+                        mechanic.name!,
                         style: const TextStyle(color: Colors.black),
                       ),
                     );
@@ -143,7 +147,8 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                                   bookingTitle: bookingTitleController.text,
                                   startDateTime: startDateTime,
                                   endDateTime: endDateTime,
-                                  assignedMechanic: selectedMechanic));
+                                  assignedMechanic: selectedMechanic,
+                                  mechanicId: selectedMechanicId));
                           final updatedBooking = ref.read(carInfoStateProvider);
                           await ref
                               .read(bookingControllerProvider.notifier)

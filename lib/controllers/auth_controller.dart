@@ -21,7 +21,6 @@ class AuthController extends StateNotifier<UserModel?> {
 
   Future<void> logIn(String email, String password) async {
     final user = await _firebaseService.logInUser(email, password);
-    print('USERINFO ${user?.role}');
     state = user;
   }
 

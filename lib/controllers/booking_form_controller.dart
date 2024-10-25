@@ -20,11 +20,21 @@ class BookingController extends StateNotifier<List<BookingModel>> {
   Future<void> fetchBookings() async {
     try {
       final bookingsData = await _firebaseService.fetchBookings();
-      print('Fetched Bookings from Firebase: $bookingsData');
       state = bookingsData;
     } catch (e) {
       print('Error fetching bookings: $e');
       state = [];
+    }
+  }
+
+
+  Future<List<BookingModel>> fetchBookingsByMechanic(String mechanic) async {
+    try {
+      final bookingsData = await _firebaseService.fetchBookingsByMechanic(mechanic);
+      return state = bookingsData;
+    } catch (e) {
+      print('Error fetching bookings: $e');
+      return state = [];
     }
   }
 
