@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:car_workshop_app/components/text_form_field.dart';
 
+import '../../../components/error_dialog.dart';
 import '../../../controllers/booking_form_controller.dart';
 import '../../../models/booking_model.dart';
 
@@ -33,6 +34,8 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
 
   @override
   Widget build(BuildContext context) {
+    final currentState = ref.watch(carInfoStateProvider);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -73,26 +76,20 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
                   child: CommonButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        final currentState = ref.read(carInfoStateProvider.notifier).state;
-
-                        final customer = ref
-                            .read(carInfoStateProvider.notifier)
-                            .update((state) =>
-                            BookingModel(
-                                carMake: currentState.carMake,
-                                carModel: currentState.carModel,
-                                carYear: currentState.carYear,
-                                registrationPlate: currentState.registrationPlate,
-                                customerName: customerNameController.text,
-                                customerEmail: customerEmailController.text,
-                                customerPhone: customerPhoneController.text,
-                                bookingTitle: currentState.bookingTitle,
-                                startDateTime: currentState.startDateTime,
-                                endDateTime: currentState.endDateTime
-                            ));
-                        print('CustomerInfo ${customer.customerName}  ${customer
-                            .customerEmail}  ${customer.customerPhone}');
-                        widget.tabController.animateTo(2);
+                        try{
+                          final customer = ref
+                              .read(carInfoStateProvider.notifier)
+                              .update((state) => state.copyWith(
+                                    customerName: customerNameController.text,
+                                    customerEmail: customerEmailController.text,
+                                    customerPhone: customerPhoneController.text,
+                                  ));
+                          widget.tabController.animateTo(2);
+                        }catch(e){
+                          if(context.mounted){
+                            showErrorDialog(context,e.toString());
+                          }
+                        }
                       }
                     },
                     title: 'Next',

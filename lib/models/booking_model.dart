@@ -25,6 +25,34 @@ class BookingModel {
     this.assignedMechanic,
   });
 
+  BookingModel copyWith({
+    String? carMake,
+    String? carModel,
+    String? carYear,
+    String? registrationPlate,
+    String? customerName,
+    String? customerPhone,
+    String? customerEmail,
+    String? bookingTitle,
+    DateTime? startDateTime,
+    DateTime? endDateTime,
+    String? assignedMechanic,
+  }) {
+    return BookingModel(
+      carMake: carMake ?? this.carMake,
+      carModel: carModel ?? this.carModel,
+      carYear: carYear ?? this.carYear,
+      registrationPlate: registrationPlate ?? this.registrationPlate,
+      customerName: customerName ?? this.customerName,
+      customerPhone: customerPhone ?? this.customerPhone,
+      customerEmail: customerEmail ?? this.customerEmail,
+      bookingTitle: bookingTitle ?? this.bookingTitle,
+      startDateTime: startDateTime ?? this.startDateTime,
+      endDateTime: endDateTime ?? this.endDateTime,
+      assignedMechanic: assignedMechanic ?? this.assignedMechanic,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'carMake': carMake,

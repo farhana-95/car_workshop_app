@@ -4,6 +4,7 @@ import 'package:car_workshop_app/controllers/booking_form_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../components/error_dialog.dart';
 import '../../../models/booking_model.dart';
 
 class CarInfoTab extends ConsumerStatefulWidget {
@@ -24,7 +25,7 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
     final registrationPlateController = TextEditingController();
 
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+    final bookingModel = ref.watch(carInfoStateProvider);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -70,25 +71,22 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
                   child: CommonButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        final currentState = ref.read(carInfoStateProvider.notifier).state;
-
-                        final carInfo = ref
-                            .read(carInfoStateProvider.notifier)
-                            .update((state) => BookingModel(
-                                carMake: carMakeController.text,
-                                carModel: carModelController.text,
-                                carYear: carYearController.text,
-                                registrationPlate:
-                                    registrationPlateController.text,
-                                customerEmail: currentState.customerEmail,
-                                customerName: currentState.customerName,
-                                customerPhone: currentState.customerPhone,
-                                bookingTitle: currentState.bookingTitle,
-                                startDateTime: currentState.startDateTime,
-                                endDateTime: currentState.endDateTime));
-                        print(
-                            'CarInfo ${carInfo.carMake} ${carInfo.carModel} ${carInfo.carYear}');
-                        widget.tabController.animateTo(1);
+                        try {
+                          final carInfo = ref
+                              .read(carInfoStateProvider.notifier)
+                              .update((state) => state.copyWith(
+                                    carMake: carMakeController.text,
+                                    carModel: carModelController.text,
+                                    carYear: carYearController.text,
+                                    registrationPlate:
+                                        registrationPlateController.text,
+                                  ));
+                          widget.tabController.animateTo(1);
+                        } catch (e) {
+                          if (context.mounted) {
+                            showErrorDialog(context, e.toString());
+                          }
+                        }
                       }
                     },
                     title: 'Next',

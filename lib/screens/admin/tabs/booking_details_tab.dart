@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:car_workshop_app/components/text_form_field.dart';
 import 'package:intl/intl.dart';
 
+import '../../../components/error_dialog.dart';
 import '../../../controllers/booking_form_controller.dart';
 import '../../../models/booking_model.dart';
 
@@ -82,6 +83,8 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final currentState = ref.watch(carInfoStateProvider);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -169,37 +172,35 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                   child: CommonButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        DateTime startDateTime = DateFormat('dd/MM/yyyy HH:mm')
-                            .parse(startDateTimeController.text);
-                        DateTime endDateTime = DateFormat('dd/MM/yyyy HH:mm')
-                            .parse(endDateTimeController.text);
-                        final currentState = ref.read(carInfoStateProvider.notifier).state;
+                        try {
+                          DateTime startDateTime =
+                              DateFormat('dd/MM/yyyy HH:mm')
+                                  .parse(startDateTimeController.text);
+                          DateTime endDateTime = DateFormat('dd/MM/yyyy HH:mm')
+                              .parse(endDateTimeController.text);
 
-                        final details = ref
-                            .read(carInfoStateProvider.notifier)
-                            .update((state) => BookingModel(
-                                carMake: currentState.carMake,
-                                carModel: currentState.carModel,
-                                carYear: currentState.carYear,
-                                registrationPlate: currentState.registrationPlate,
-                                customerEmail: currentState.customerEmail,
-                                customerName: currentState.customerName,
-                                customerPhone: currentState.customerPhone,
-                                bookingTitle: bookingTitleController.text,
-                                startDateTime: startDateTime,
-                                endDateTime: endDateTime));
-                        print(
-                            'DetailsInfo ${details.bookingTitle} ${details.startDateTime} ${details.endDateTime}');
-                        print(
-                            'InfoProvider ${ref.watch(carInfoStateProvider).toString()}');
-                        final updatedBooking = ref.read(carInfoStateProvider);
-                        await ref
-                            .read(bookingControllerProvider.notifier)
-                            .addBooking(updatedBooking);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const AdminScreen()),
-                        );
+                          final details = ref
+                              .read(carInfoStateProvider.notifier)
+                              .update((state) => state.copyWith(
+                                  bookingTitle: bookingTitleController.text,
+                                  startDateTime: startDateTime,
+                                  endDateTime: endDateTime,
+                                  assignedMechanic: selectedMechanic));
+                          final updatedBooking = ref.read(carInfoStateProvider);
+                          await ref
+                              .read(bookingControllerProvider.notifier)
+                              .addBooking(updatedBooking);
+                          if (context.mounted) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => const AdminScreen()),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            showErrorDialog(context, e.toString());
+                          }
+                        }
                       }
                     },
                     title: 'Submit',
