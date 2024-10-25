@@ -1,5 +1,5 @@
 import 'package:car_workshop_app/screens/admin/car_booking_form.dart';
-import 'package:car_workshop_app/screens/admin/view_bookings.dart';
+import 'package:car_workshop_app/screens/admin/booking_on_calender.dart';
 import 'package:flutter/material.dart';
 import 'package:car_workshop_app/const/color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +20,8 @@ class _AdminScreenState extends ConsumerState<AdminScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,7 +39,8 @@ class _AdminScreenState extends ConsumerState<AdminScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+        padding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.020, vertical: screenHeight * 0.040),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -53,7 +56,7 @@ class _AdminScreenState extends ConsumerState<AdminScreen> {
                 icon: Icons.add_circle_outline,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenHeight * 0.020),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).push(

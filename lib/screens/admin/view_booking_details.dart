@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 
 import 'package:car_workshop_app/models/booking_model.dart';
 
-import '../../const/color.dart';
+import 'package:car_workshop_app/const/color.dart';
 
 class ViewBookingDetails extends StatelessWidget {
   final BookingModel booking;
-  const ViewBookingDetails({super.key,required this.booking});
+
+  const ViewBookingDetails({super.key, required this.booking});
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Booking Details',style: TextStyle(color: ColorList.blue),),
+        title: const Text(
+          'Booking Details',
+          style: TextStyle(color: ColorList.blue),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -36,30 +41,28 @@ class ViewBookingDetails extends StatelessWidget {
                 ),
               ),
             ),
-
             _buildInfoCard('Customer Information', [
               _buildInfoRow('Name', booking.customerName ?? 'N/A'),
               _buildInfoRow('Phone', booking.customerPhone ?? 'N/A'),
               _buildInfoRow('Email', booking.customerEmail ?? 'N/A'),
             ]),
-
             _buildInfoCard('Car Details', [
               _buildInfoRow('Make', booking.carMake ?? 'N/A'),
               _buildInfoRow('Model', booking.carModel ?? 'N/A'),
               _buildInfoRow('Year', booking.carYear ?? 'N/A'),
-              _buildInfoRow('Registration Plate', booking.registrationPlate ?? 'N/A'),
+              _buildInfoRow(
+                  'Registration Plate', booking.registrationPlate ?? 'N/A'),
             ]),
-
             _buildInfoCard('Booking Dates', [
-              _buildInfoRow('Start Date', booking.startDateTime?.toLocal().toString() ?? 'N/A'),
-              _buildInfoRow('End Date', booking.endDateTime?.toLocal().toString() ?? 'N/A'),
+              _buildInfoRow('Start Date',
+                  booking.startDateTime?.toLocal().toString() ?? 'N/A'),
+              _buildInfoRow('End Date',
+                  booking.endDateTime?.toLocal().toString() ?? 'N/A'),
             ]),
-
-            _buildInfoCard('Assigned Mechanic', [
-              _buildInfoRow('', booking.assignedMechanic ?? 'N/A'),
+            _buildInfoCard('Assigned to', [
+              _buildInfoRow('Name', booking.assignedMechanic ?? 'N/A'),
             ]),
-            const SizedBox(height: 20),
-
+            SizedBox(height: screenHeight * 0.020),
           ],
         ),
       ),

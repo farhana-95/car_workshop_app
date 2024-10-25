@@ -8,7 +8,7 @@ class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<UserModel?> signUpUser(
-      String email, String password, String role) async {
+      String email, String password, String role, String name) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -18,12 +18,12 @@ class FirebaseService {
 
       UserModel user = UserModel(
         uid: userCredential.user!.uid,
+        name: name,
         email: email,
         role: role,
       );
 
       await _firestore.collection('users').doc(user.uid).set(user.toMap());
-      print('Created the user');
       return user;
     } catch (e) {
       print('Sign up error: $e');
@@ -61,16 +61,16 @@ class FirebaseService {
           .toList();
       return data;
     } catch (e) {
-      
+
       return [];
     }
   }
 
-  Future<List<BookingModel>> fetchBookingsByMechanic(String assignedMechanic) async {
+  Future<List<BookingModel>> fetchBookingsByMechanic(String mechanicId) async {
     try {
       final querySnapshot = await _firestore
           .collection('bookings')
-          .where('assignedMechanic', isEqualTo: assignedMechanic)
+          .where('mechanicId', isEqualTo: mechanicId)
           .get();
 
       return querySnapshot.docs

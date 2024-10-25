@@ -2,8 +2,9 @@ import 'package:car_workshop_app/screens/admin/view_booking_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../../controllers/booking_form_controller.dart';
-import '../../models/booking_model.dart';
+import 'package:car_workshop_app/const/color.dart';
+import 'package:car_workshop_app/controllers/booking_form_controller.dart';
+import 'package:car_workshop_app/models/booking_model.dart';
 
 class ViewBookings extends ConsumerStatefulWidget {
   const ViewBookings({super.key});
@@ -21,7 +22,9 @@ class _ViewBookingsState extends ConsumerState<ViewBookings> {
     super.initState();
     _focusedDay = DateTime.now();
     _selectedDay = _focusedDay;
-    ref.read(bookingControllerProvider.notifier).fetchBookings(); // Fetch bookings on init
+    ref
+        .read(bookingControllerProvider.notifier)
+        .fetchBookings(); // Fetch bookings on init
   }
 
   @override
@@ -29,7 +32,6 @@ class _ViewBookingsState extends ConsumerState<ViewBookings> {
     final bookings = ref.watch(bookingControllerProvider);
 
     final bookingsMap = _mapBookingsByDate(bookings);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Bookings Calendar')),
       body: Column(
@@ -44,33 +46,32 @@ class _ViewBookingsState extends ConsumerState<ViewBookings> {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
-              print('Selected day: $_selectedDay');
 
-              // Normalize the selected day to ignore time
               final normalizedSelectedDay = DateTime(
                 _selectedDay.year,
                 _selectedDay.month,
                 _selectedDay.day,
               );
 
-              // Check bookings for the selected day
-              final bookingsForSelectedDay = bookingsMap[normalizedSelectedDay] ?? [];
-              print('Bookings for selected day: $bookingsForSelectedDay');
+              final bookingsForSelectedDay =
+                  bookingsMap[normalizedSelectedDay] ?? [];
             },
           ),
           Expanded(
             child: _buildBookingList(bookingsMap[DateTime(
-              _selectedDay.year,
-              _selectedDay.month,
-              _selectedDay.day,
-            )] ?? []),
+                  _selectedDay.year,
+                  _selectedDay.month,
+                  _selectedDay.day,
+                )] ??
+                []),
           ),
         ],
       ),
     );
   }
 
-  Map<DateTime, List<BookingModel>> _mapBookingsByDate(List<BookingModel> bookings) {
+  Map<DateTime, List<BookingModel>> _mapBookingsByDate(
+      List<BookingModel> bookings) {
     final Map<DateTime, List<BookingModel>> bookingsMap = {};
 
     for (var booking in bookings) {
@@ -97,10 +98,13 @@ class _ViewBookingsState extends ConsumerState<ViewBookings> {
       itemCount: bookings.length,
       itemBuilder: (context, index) {
         final booking = bookings[index];
-        return Card(
+        return Container(
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+            border: Border.all(color: ColorList.blue, width: 1),
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
             title: Text(
               booking.bookingTitle ?? 'No title',
               style: const TextStyle(fontWeight: FontWeight.bold),

@@ -23,7 +23,7 @@ class _BookingListState extends ConsumerState<BookingList> {
   }
 
   Future<void> _fetchBookings() async {
-    User? user = FirebaseAuth.instance.currentUser; // Get the current user
+    User? user = FirebaseAuth.instance.currentUser;
     String? userId = user?.uid;
     if (userId != null) {
       final bookings = await ref

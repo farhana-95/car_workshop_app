@@ -2,8 +2,9 @@ import 'package:car_workshop_app/screens/mechanic/booking_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../const/color.dart';
-import '../../controllers/auth_controller.dart';
+import 'package:car_workshop_app/const/color.dart';
+import 'package:car_workshop_app/controllers/auth_controller.dart';
+import 'booking calender.dart';
 
 class MechanicScreen extends ConsumerStatefulWidget {
   const MechanicScreen({super.key});
@@ -39,12 +40,26 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const BookingList()),
+                    MaterialPageRoute(
+                        builder: (context) => const BookingList()),
                   );
                 },
                 child: _buildDashboardCard(
                   title: 'View Booking List',
                   icon: Icons.event_available,
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => const BookingCalender()),
+                  );
+                },
+                child: _buildDashboardCard(
+                  title: 'View Bookings',
+                  icon: Icons.event_note_outlined,
                 ),
               ),
             ],
@@ -53,6 +68,7 @@ class _MechanicScreenState extends ConsumerState<MechanicScreen> {
       ),
     );
   }
+
   Widget _buildDashboardCard({
     required String title,
     required IconData icon,

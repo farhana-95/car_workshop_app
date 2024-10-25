@@ -3,7 +3,7 @@ import 'package:car_workshop_app/screens/admin/tabs/car_info_tab.dart';
 import 'package:car_workshop_app/screens/admin/tabs/customer_info_tab.dart';
 import 'package:flutter/material.dart';
 
-import '../../const/color.dart';
+import 'package:car_workshop_app/const/color.dart';
 
 class CarBookingForm extends StatefulWidget {
   const CarBookingForm({super.key});
@@ -32,7 +32,10 @@ class _CarBookingFormState extends State<CarBookingForm>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Booking Service',style: TextStyle(color: ColorList.blue),),
+        title: const Text(
+          'Booking Service',
+          style: TextStyle(color: ColorList.blue),
+        ),
         centerTitle: true,
         bottom: TabBar(
           indicatorSize: TabBarIndicatorSize.tab,
@@ -50,7 +53,9 @@ class _CarBookingFormState extends State<CarBookingForm>
         children: [
           CarInfoTab(tabController: _tabController),
           CustomerInfoTab(tabController: _tabController),
-          BookingDetailsTab(tabController: _tabController,),
+          BookingDetailsTab(
+            tabController: _tabController,
+          ),
         ],
       ),
     );

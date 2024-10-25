@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:car_workshop_app/const/color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../controllers/auth_controller.dart';
+import 'package:car_workshop_app/controllers/auth_controller.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -14,8 +14,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final nameController = TextEditingController();
   bool _isLogin = true;
   String? _role;
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,20 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    if (!_isLogin) ...[
+                      TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(labelText: 'Name'),
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a name';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                    SizedBox(height: screenHeight * 0.020),
                     TextFormField(
                       controller: emailController,
                       decoration: const InputDecoration(labelText: 'Email'),
@@ -61,8 +77,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     SizedBox(height: screenHeight * 0.020),
                     TextFormField(
                       controller: passwordController,
-                      decoration: const InputDecoration(labelText: 'Password'),
-                      obscureText: true,
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                              icon: Icon(_isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off))),
+                      obscureText: !_isPasswordVisible,
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
@@ -151,13 +177,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
       try {
         await ref.read(authControllerProvider.notifier).signUp(
-              emailController.text,
-              passwordController.text,
-              _role!,
-            );
+            emailController.text,
+            passwordController.text,
+            _role!,
+            nameController.text);
       } catch (e) {
         if (mounted) {
-         _showSnackBar('Sign up failed: $e');
+          _showSnackBar('Sign up failed: $e');
         }
       }
     }
@@ -179,11 +205,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     }
   }
 
-
   void _showSnackBar(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(message)),
       );
     }
-  }}
+  }
+}

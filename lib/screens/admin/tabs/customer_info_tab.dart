@@ -37,7 +37,8 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
   @override
   Widget build(BuildContext context) {
     ref.watch(carInfoStateProvider);
-
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -47,7 +48,7 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                SizedBox(height: screenHeight*0.010),
                 const Center(
                   child: Text(
                     'Customer Information',
@@ -58,22 +59,22 @@ class _CustomerInfoTabState extends ConsumerState<CustomerInfoTab> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight * 0.018),
                 CustomTextFormField(
                   controller: customerNameController,
                   label: 'Name',
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight * 0.018),
                 CustomTextFormField(
                   controller: customerPhoneController,
                   label: 'Phone Number',
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight * 0.018),
                 CustomTextFormField(
                   controller: customerEmailController,
                   label: 'Email',
                 ),
-                const SizedBox(height: 35),
+                SizedBox(height: screenHeight * 0.035),
                 Center(
                   child: CommonButton(
                     onPressed: () {

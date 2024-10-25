@@ -40,6 +40,8 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
 
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     ref.watch(carInfoStateProvider);
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -49,7 +51,7 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                 SizedBox(height: screenHeight * 0.010),
                 const Center(
                   child: Text(
                     'Enter Car Information',
@@ -60,27 +62,27 @@ class _CarInfoTabState extends ConsumerState<CarInfoTab> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight* 0.018),
                 CustomTextFormField(
                   controller: carMakeController,
                   label: 'Make',
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight * 0.018),
                 CustomTextFormField(
                   controller: carModelController,
                   label: 'Model',
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight* 0.018),
                 CustomTextFormField(
                   controller: carYearController,
                   label: 'Year',
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight * 0.018),
                 CustomTextFormField(
                   controller: registrationPlateController,
                   label: 'Registration Plate',
                 ),
-                const SizedBox(height: 35),
+                SizedBox(height:screenHeight* 0.035),
                 Center(
                   child: CommonButton(
                     onPressed: () {

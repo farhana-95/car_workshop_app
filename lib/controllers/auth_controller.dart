@@ -14,8 +14,8 @@ class AuthController extends StateNotifier<UserModel?> {
 
   UserModel? get user => state;
 
-  Future<void> signUp(String email, String password, String role) async {
-    final user = await _firebaseService.signUpUser(email, password, role);
+  Future<void> signUp(String email, String password, String role, String name) async {
+    final user = await _firebaseService.signUpUser(email, password, role, name);
     state = user;
   }
 

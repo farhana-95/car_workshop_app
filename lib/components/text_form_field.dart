@@ -44,6 +44,12 @@ class CustomTextFormField extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.transparent),
         ),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter a value';
+        }
+        return null;
+      },
       style: const TextStyle(
         color: Colors.black,
         fontSize: 16,

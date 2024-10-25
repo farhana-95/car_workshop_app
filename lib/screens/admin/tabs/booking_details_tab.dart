@@ -44,7 +44,8 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
   @override
   Widget build(BuildContext context) {
     ref.watch(carInfoStateProvider);
-
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -54,7 +55,7 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
+                SizedBox(height: screenHeight * 0.01),
                 const Center(
                   child: Text(
                     'Booking Details',
@@ -65,26 +66,26 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight* 0.018),
                 CustomTextFormField(
                   controller: bookingTitleController,
                   label: 'Booking Title',
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight* 0.018),
                 CustomTextFormField(
                   controller: startDateTimeController,
                   label: 'Start DateTime',
                   isDateTimePicker: true,
                   onTap: () => _selectDateTime(startDateTimeController),
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: screenHeight* 0.018),
                 CustomTextFormField(
                   controller: endDateTimeController,
                   label: 'End DateTime',
                   isDateTimePicker: true,
                   onTap: () => _selectDateTime(endDateTimeController),
                 ),
-                const SizedBox(height: 28),
+                SizedBox(height: screenHeight* 0.028),
                 const Text(
                   'Assign Mechanic',
                   style: TextStyle(
@@ -93,9 +94,9 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: screenHeight* 0.014),
                 DropdownButtonFormField<String>(
-                  value: selectedMechanic,
+                  value: selectedMechanicId,
                   hint: const Text('Assign Mechanic'),
                   onChanged: (newValue) {
                     final selectedMechanicModel = _mechanics
@@ -116,7 +117,7 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                   }).toList(),
                   decoration: InputDecoration(
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    EdgeInsets.symmetric(vertical: screenHeight*0.02,horizontal: screenWidth * 0.08),
                     filled: true,
                     fillColor: Colors.grey[200],
                     focusedBorder: OutlineInputBorder(
@@ -130,7 +131,7 @@ class _BookingDetailsTabState extends ConsumerState<BookingDetailsTab> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 35),
+                SizedBox(height: screenHeight* 0.035),
                 Center(
                   child: CommonButton(
                     onPressed: () async {
